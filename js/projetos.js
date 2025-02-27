@@ -66,23 +66,38 @@ const projetos =
     }, 
 ];
 
-for (const exibirProjetos of projetos)
-{
-    const containerProjeto =
-    `
-    <div class="projeto ${exibirProjetos.status}">
-        <a href="${exibirProjetos.linkSite}" target="_blank">
-        <img src="${exibirProjetos.imagem}" alt="Projeto ${exibirProjetos.nome}">
-        <h3>${exibirProjetos.nome}</h3>
-        <div class="informacoes-projeto">
-            <p>${exibirProjetos.detalhes}</p>
-            <a href="${exibirProjetos.linkGitHub}" target="_blank">
-                <p>📎 Ver no GitHub</p>
-            </a>
-        </div>
-        </a>
-    </div>
-    `;
+const carousel = document.getElementById("carousel");
 
-    document.getElementById("container-projetos").innerHTML += containerProjeto;
-};
+// biome-ignore lint/complexity/noForEach: <explanation>
+projetos.forEach(projeto => {
+    const item = document.createElement("div");
+    item.classList = "w-64 flex-shrink-0 snap-center p-4 bg-secondary rounded-lg shadow-lg transition-transform transform hover:scale-105";
+    item.innerHTML = `
+        <a href="${projeto.linkSite}" target="_blank">
+            <img src="${projeto.imagem}" alt="${projeto.nome}" class="rounded-lg w-full h-40 object-cover mb-2">
+            <h3 class="text-lg font-semibold">${projeto.nome}</h3>
+        </a>
+        <p class="text-sm text-gray-400 mb-2">${projeto.detalhes}</p>
+        <div class="flex justify-between items-center">
+            <a href="${projeto.linkGitHub}" target="_blank" class="text-sm text-accent">📎 Ver no GitHub</a>
+            <button onclick="window.open('${projeto.linkSite}', '_blank')" class="px-3 py-1 bg-accent text-white rounded-md text-sm">Acessar</button>
+        </div>
+    `;
+    carousel.appendChild(item);
+});
+
+function nextSlide() {
+    carousel.scrollBy({ left: 280, behavior: 'smooth' });
+}
+
+function prevSlide() {
+    carousel.scrollBy({ left: -280, behavior: 'smooth' });
+}
+
+const toggleDarkMode = document.getElementById("toggle-darkmode");
+toggleDarkMode.addEventListener("click", () => {
+    document.body.classList.toggle("bg-white");
+    document.body.classList.toggle("text-black");
+    document.body.classList.toggle("bg-dark");
+    document.body.classList.toggle("text-white");
+});
